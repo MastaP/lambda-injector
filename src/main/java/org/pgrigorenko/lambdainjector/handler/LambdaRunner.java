@@ -8,11 +8,15 @@ import pl.joegreen.lambdaFromString.TypeReference;
  */
 public class LambdaRunner {
 
-  public static void fromString(String lambda) {
-    System.err.println("\n\nGoing to run the following lambda: " + lambda);
+  private static final String FORMAT_RUNNABLE = "() -> { %s }";
+
+  public static void executeRunnableBody(String body) {
     //TODO encode/decode base64
     final LambdaFactory lambdaFactory = LambdaFactory.get();
-    final Runnable runnable = lambdaFactory.createLambdaUnchecked(lambda, new TypeReference<Runnable>() {});
+    final Runnable runnable =
+            lambdaFactory.createLambdaUnchecked(
+                    String.format(FORMAT_RUNNABLE, body),
+                    new TypeReference<Runnable>() {});
     runnable.run();
   }
 }
