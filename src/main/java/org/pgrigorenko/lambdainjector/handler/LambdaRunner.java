@@ -9,8 +9,13 @@ import pl.joegreen.lambdaFromString.TypeReference;
 public class LambdaRunner {
 
   private static final String FORMAT_RUNNABLE = "() -> { %s }";
+  private static final ThreadLocal<Boolean> isRunning = ThreadLocal.withInitial(() -> Boolean.FALSE);
 
   public static void executeRunnableBody(String body) {
+    if (isRunning.get()) {
+      return;
+    }
+    isRunning.set(true);
     //TODO encode/decode base64
     final LambdaFactory lambdaFactory = LambdaFactory.get();
     final Runnable runnable =
@@ -18,5 +23,9 @@ public class LambdaRunner {
                     String.format(FORMAT_RUNNABLE, body),
                     new TypeReference<Runnable>() {});
     runnable.run();
+  }
+
+  public static void cleanup() {
+    isRunning.remove();
   }
 }

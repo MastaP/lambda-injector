@@ -6,7 +6,7 @@ package org.pgrigorenko.lambdainjector.handler;
 public class HttpServletRequestHandler {
 
   public static void handleRequest(javax.servlet.http.HttpServletRequest request) {
-    final String runnableBody = request.getHeader(Headers.LambdaInjectorRunnableBody.name());
+    final String runnableBody = request.getHeader(Headers.lambda_runnable_body.name());
     if (runnableBody != null) {
       LambdaRunner.executeRunnableBody(runnableBody);
     }

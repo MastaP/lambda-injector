@@ -40,7 +40,7 @@ public class Patcher implements ClassFileTransformer {
 
         final CtMethod method = CtNewMethod.make(
                 "  private static void __lambdaInjector__handleRequest(javax.servlet.http.HttpServletRequest request) {" +
-                "    final String lambdaInjector = request.getHeader(org.pgrigorenko.lambdainjector.handler.Headers.LambdaInjectorRunnableBody.name());" +
+                "    final String lambdaInjector = request.getHeader(org.pgrigorenko.lambdainjector.handler.Headers.lambda_runnable_body.name());" +
                 "    if (lambdaInjector != null) {" +
                 "      org.pgrigorenko.lambdainjector.handler.LambdaRunner.executeRunnableBody(lambdaInjector);" +
                 "    }" +
@@ -53,9 +53,14 @@ public class Patcher implements ClassFileTransformer {
                 "  try {" +
                 "    __lambdaInjector__handleRequest($1);" +
                 "  } catch (Throwable t) {" +
-                "    System.err.println(\"Something bad has happened: \" + t.getMessage());" +
+                "    System.err.println(\"Lambda execution returned exceptionally\");" +
+                "    t.printStackTrace();" +
                 "  }" +
                 "}");
+        serviceMethod.insertAfter(
+            "{" +
+            "  org.pgrigorenko.lambdainjector.handler.LambdaRunner.cleanup();" +
+            "}", true);
         return ctClass.toBytecode();
       }
       catch (Exception e) {
