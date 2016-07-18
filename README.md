@@ -5,7 +5,6 @@ It might be useful in testing or debugging, when you don't want to recompile you
 Add the following to the application server startup command line:
 
 ```
-#!bash
 -javaagent:"path/to/lambdainjector-agent.jar"
 ```
 
